@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;MemberVO.java&apos; to &apos;pro22/src/main/java/com.spring.member.vo&apos;&#x0D;&#x0A;- Original project: &apos;pro17&apos;&#x0D;&#x0A;- Destination element: &apos;pro22/src/main/java/com.spring.member.vo&apos;&#x0D;&#x0A;- Original element: &apos;sec02.ex02.MemberVO.java&apos;" description="Copy compilation unit" destination="=pro22/src\/main\/java&lt;com.spring.member.vo" element1="/src\/main\/java&lt;sec02.ex02{MemberVO.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1788228108473" units="1" version="1.0"/>
+</session>

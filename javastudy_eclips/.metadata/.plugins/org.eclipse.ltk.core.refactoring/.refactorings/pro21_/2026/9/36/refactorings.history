@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move package &apos;com.spring.memer.dao&apos; to &apos;pro22/src/main/java&apos;&#x0D;&#x0A;- Original project: &apos;pro21_&apos;&#x0D;&#x0A;- Destination element: &apos;pro22/src/main/java&apos;&#x0D;&#x0A;- Original element: &apos;pro21_/src/main/java/com.spring.memer.dao&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move package" destination="=pro22/src\/main\/java" element1="/src\/main\/java&lt;com.spring.memer.dao" flags="589830" fragments="1" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.movePackages" stamp="1788228011606" version="1.0"/>
+</session>

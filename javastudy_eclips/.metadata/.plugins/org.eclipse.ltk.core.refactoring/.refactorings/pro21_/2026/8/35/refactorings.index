@@ -1,0 +1,14 @@
+1787620905857	Move 'action-servlet.xml' to 'WEB-INF'
+1787621659248	Move 'test' to 'WEB-INF'
+1787622069245	Rename compilation unit 'SimpleUrlContriller.java'
+1787622300829	Move 'test' to 'webapp'
+1787632171797	Copy file
+1787632181592	Rename resource 'index2.jsp'
+1787632729588	Copy file
+1787634824943	Rename resource 'action-servlet.xml'
+1787635682524	Delete element
+1787638172653	Copy file
+1787642301894	Copy file
+1787644266879	Copy compilation unit
+1787644447253	Delete element
+1787644454454	Rename compilation unit 'UserController2.java'

@@ -1,0 +1,4 @@
+1787646326092	Move 'action-servlet.xml' to 'webapp'
+1787646363765	Move 'action-servlet.xml' to 'WEB-INF'
+1787646390522	Rename resource 'action-dataSource.xml'
+1787646418703	Delete element

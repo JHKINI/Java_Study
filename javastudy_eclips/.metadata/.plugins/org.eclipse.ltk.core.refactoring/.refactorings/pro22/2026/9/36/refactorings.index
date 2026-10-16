@@ -1,0 +1,19 @@
+1788228111606	Delete element
+1788228131124	Copy package
+1788228174423	Delete element
+1788228766780	Move 'views' to 'WEB-INF'
+1788229297365	Rename compilation unit 'MemverController.java'
+1788233691199	Move 'action-servlet.xml' to 'views'
+1788233703319	Move 'action-service.xml' to 'WEB-INF'
+1788233942730	Move 'action-service.xml' to 'config'
+1788233949830	Move 'action-servlet.xml' to 'WEB-INF'
+1788237037012	Rename package 'com.spring.memer.dao'
+1788237655498	Rename compilation unit 'MemverServiceimpl.java'
+1788237679658	Rename compilation unit 'MemberServiceimpl.java'
+1788237707971	Rename compilation unit 'MemberDAOimpl.java'
+1788237723013	Rename compilation unit 'MemberControllerimpl.java'
+1788240142411	Rename resource 'listMember.jsp'
+1788243330495	Copy file
+1788243348138	Copy file
+1788243353620	Copy file
+1788246618818	Copy files
