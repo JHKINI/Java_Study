@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.board">
+
+    <resultMap id="articlesResult" type="articleVO">
+        <result property="level" column="level"/>
+        <result property="articleNO" column="articleNO"/>
+        <result property="parentNO" column="parentNO"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="writeDate" column="writeDate"/>
+        <result property="imageFileName" column="imageFileName"/>
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <!-- 30.4 모든 글 조회 (답글은 계층형 쿼리로 부모 글 아래에 정렬) -->
+    <select id="selectAllArticlesList" resultMap="articlesResult">
+        <![CDATA[
+            SELECT level, articleNO, parentNO, title, content,
+                   writeDate, imageFileName, id
+            FROM T_BOARD
+            START WITH parentNO = 0
+            CONNECT BY PRIOR articleNO = parentNO
+            ORDER SIBLINGS BY articleNO DESC
+        ]]>
+    </select>
+
+    <!-- 30.5 새 글 추가 (글 정보는 Map 으로 전달됨) -->
+    <insert id="insertNewArticle" parameterType="java.util.Map">
+        <![CDATA[
+            INSERT INTO T_BOARD
+                (articleNO, id, title, content, imageFileName)
+            VALUES
+                (#{articleNO}, #{id}, #{title}, #{content}, #{imageFileName, jdbcType=VARCHAR})
+        ]]>
+    </insert>
+
+    <!-- 새 글 번호 (글이 하나도 없으면 1) -->
+    <select id="selectNewArticleNO" resultType="int">
+        <![CDATA[
+            SELECT NVL(MAX(articleNO), 0) + 1
+            FROM T_BOARD
+        ]]>
+    </select>
+
+    <!-- 30.6 글 번호로 글 정보 조회 -->
+    <select id="selectArticle"
+            resultType="articleVO"
+            parameterType="int">
+        <![CDATA[
+        SELECT *
+        FROM T_BOARD
+        WHERE articleNO = #{articleNO}
+        ]]>
+    </select>
+
+    <!-- 30.7 글 수정 : 이미지를 새로 첨부한 경우에만 imageFileName 도 수정 -->
+    <update id="updateArticle" parameterType="java.util.Map">
+        UPDATE T_BOARD
+        SET title = #{title},
+            content = #{content}
+        <if test="imageFileName != '' and imageFileName != null">
+            , imageFileName = #{imageFileName}
+        </if>
+        WHERE articleNO = #{articleNO}
+    </update>
+    <delete id="removeArticle" parameterType="int">
+        <![CDATA[
+            delete from T_BOARD
+            where  ARTICLENO in(
+                select ARTICLENO from T_BOARD
+                    start with ARTICLENO = #{articleNO}
+                    connect by prior ARTICLENO=PARENTNO)
+                ]]>
+    </delete>
+</mapper>
