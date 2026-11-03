@@ -31,9 +31,7 @@
         <put-attribute name="body" value="/WEB-INF/views/member/memberForm.jsp" />
     </definition>
 
-    <definition name="/member/viewDetail" extends="baseLayout">
-        <put-attribute name="title" value="회원상세창"/>
-        <put-attribute name="body" value="/WEB-INF/views/member/viewDetail.jsp" />
-    </definition>
+    <!-- ViewNameInterceptor 는 "/main" 을 돌려주므로 같은 화면을 이 이름으로도 등록 -->
+    <definition name="/main" extends="main"/>
 
 </tiles-definitions>

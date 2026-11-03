@@ -1,76 +1,53 @@
-
 package com.myspring.pro30.common.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.net.URLConnection;
-
-import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+
 @Controller
 public class FileDownloadController {
+    // 이미지 저장 폴더. 다른 경로를 쓰려면 톰캣 실행 옵션에 -Dboard.repo=D:\board 처럼 지정
+    public static final String ARTICLE_IMAGE_REPO =
+            System.getProperty("board.repo", "c:\\board\\article_imagefile");
 
-    // 글에 첨부된 이미지가 저장된 최상위 폴더
-    private static final String ARTICLE_IMAGE_REPO =
-            "C:\\board\\article_image";
-
-    // 글 상세창의 이미지 요청 처리
     @RequestMapping("/download.do")
-    public void download(
-            @RequestParam("imageFileName") String imageFileName,
-            @RequestParam("articleNO") String articleNO,
-            HttpServletResponse response) throws Exception {
-
-        // 글 번호는 숫자만 허용
+    protected void download(@RequestParam("imageFileName") String imageFileName,
+                            @RequestParam("articleNO") String articleNO,
+                            HttpServletResponse response) throws Exception {
+        // 경로 조작(../) 방지: 글번호는 숫자만, 파일명은 이름 부분만 사용
         if (!articleNO.matches("\\d+")) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
-        // 파일 이름에서 경로 제거
-        String safeFileName = new File(imageFileName).getName();
-
-        // 글 번호 폴더 + 파일 이름으로 경로 설정
-        File file = new File(
-                ARTICLE_IMAGE_REPO + File.separator
-                        + articleNO + File.separator
-                        + safeFileName
-        );
-
-        if (!file.exists()) {
+        String safeName = FilenameUtils.getName(imageFileName);
+        File file = new File(new File(ARTICLE_IMAGE_REPO, articleNO), safeName);
+        if (!file.isFile()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        // 파일 종류에 맞는 Content-Type 설정
-        String contentType =
-                URLConnection.guessContentTypeFromName(safeFileName);
-
-        if (contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        response.setContentType(contentType);
+        String contentType = URLConnection.guessContentTypeFromName(safeName);
+        response.setContentType(contentType != null ? contentType : "application/octet-stream");
         response.setHeader("Cache-Control", "no-cache");
+        // 한글 파일명이 깨지지 않도록 인코딩
+        String encoded = URLEncoder.encode(safeName, "UTF-8").replace("+", "%20");
+        response.addHeader("Content-Disposition", "inline; filename*=UTF-8''" + encoded);
 
         OutputStream out = response.getOutputStream();
         FileInputStream in = new FileInputStream(file);
-
-        byte[] buffer = new byte[1024 * 8];
-
         try {
+            byte[] buffer = new byte[1024 * 8];
             while (true) {
                 int count = in.read(buffer);
-
-                if (count == -1) {
-                    break;
-                }
-
+                if (count == -1) break;
                 out.write(buffer, 0, count);
             }
         } finally {

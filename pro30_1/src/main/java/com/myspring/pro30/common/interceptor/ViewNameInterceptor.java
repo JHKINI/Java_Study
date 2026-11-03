@@ -1,17 +1,14 @@
 package com.myspring.pro30.common.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class ViewNameInterceptor extends HandlerInterceptorAdapter {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+public class ViewNameInterceptor extends HandlerInterceptorAdapter {
     @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
-                             Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
             String viewName = getViewName(request);
             request.setAttribute("viewName", viewName);
@@ -22,54 +19,45 @@ public class ViewNameInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response,
-                           Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response,
+                           Object handler, ModelAndView modelAndView) throws Exception {
+
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response,
-                                Object handler,
-                                Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                           Object handler, Exception ex) throws Exception {
+
     }
 
     private String getViewName(HttpServletRequest request) throws Exception {
         String contextPath = request.getContextPath();
         String uri = (String) request.getAttribute("javax.servlet.include.request_uri");
-
-        if (uri == null || uri.trim().isEmpty()) {
+        if (uri == null || uri.trim().equals("")) {
             uri = request.getRequestURI();
         }
 
         int begin = 0;
-        if (contextPath != null && !contextPath.isEmpty()) {
+        if (!((contextPath == null) || ("".equals(contextPath)))) {
             begin = contextPath.length();
         }
 
         int end;
-        if (uri.indexOf(';') != -1) {
-            end = uri.indexOf(';');
-        } else if (uri.indexOf('?') != -1) {
-            end = uri.indexOf('?');
+        if (uri.indexOf(";") != -1) {
+            end = uri.indexOf(";");
+        } else if (uri.indexOf("?") != -1) {
+            end = uri.indexOf("?");
         } else {
             end = uri.length();
         }
 
-        // 컨텍스트 경로와 확장자를 제거하되, /board/articleForm처럼
-        // 디렉터리 경로는 유지해야 Tiles 정의 이름과 일치합니다.
-        String fileName = uri.substring(begin, end);
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex != -1) {
-            fileName = fileName.substring(0, dotIndex);
+        String viewName = uri.substring(begin, end);
+        if (viewName.indexOf(".") != -1) {
+            viewName = viewName.substring(0, viewName.lastIndexOf("."));
         }
-
-        // 루트 요청은 메인 화면으로 연결
-        if (fileName.isEmpty() || fileName.equals("/")) {
-            return "main";
+        if (viewName.lastIndexOf("/") != -1) {
+            viewName = viewName.substring(viewName.lastIndexOf("/", 1), viewName.length());
         }
-
-        return fileName;
+        return viewName;
     }
 }
